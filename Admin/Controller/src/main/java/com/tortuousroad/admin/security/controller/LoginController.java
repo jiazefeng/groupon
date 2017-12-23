@@ -85,6 +85,7 @@ public class LoginController extends BaseAdminController {
 				cacheOperator.setAdminRoles(super.getCurrentUser().getId(), adminRoles);
 			}
 			logger.info("ERP登录 : " + (super.getCurrentUser()).getName());
+	        model.addAttribute("userName",super.getCurrentUser().getName());
 			return "/layout/main";
 	    } catch (Exception e) {
 			if (null != token) {

@@ -113,7 +113,9 @@
 		<property name="filterChainDefinitions">
 			<value>
 				/css/** = anon
+				/images/** = anon
 	            /login = anon
+				/register = anon
 	            /main = anon
 	            /validateCode = anon
 	            /** = authc
