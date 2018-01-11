@@ -1,5 +1,6 @@
 package com.tortuousroad.admin.security.controller;
 
+import com.tortuousroad.admin.base.controller.AjaxResult;
 import com.tortuousroad.admin.base.controller.BaseAdminController;
 import com.tortuousroad.admin.common.cache.NativeCacheOperator;
 import com.tortuousroad.admin.common.tree.EasyUITreeNode;
@@ -9,7 +10,9 @@ import com.tortuousroad.admin.security.entity.AdminRoleFunction;
 import com.tortuousroad.admin.security.entity.AdminUser;
 import com.tortuousroad.admin.security.entity.AdminUserRole;
 import com.tortuousroad.admin.security.service.AdminRoleService;
+import com.tortuousroad.admin.security.service.AdminUserService;
 import com.tortuousroad.framework.util.EncryptionUtil;
+import com.tortuousroad.groupon.deal.constant.DealConstant;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
@@ -22,8 +25,10 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -39,137 +44,147 @@ import java.util.Set;
  */
 @Controller
 public class LoginController extends BaseAdminController {
-	
-	private final static Logger logger = LoggerFactory.getLogger(LoginController.class);
-	
-	@Autowired private NativeCacheOperator cacheOperator;
-	
-    @Autowired private AdminRoleService adminRoleService;
 
-	@RequestMapping(value = "/login",method = {RequestMethod.POST, RequestMethod.GET})
-	public String login(Model model, HttpServletRequest request){
-		Subject user = SecurityUtils.getSubject();
-		if (!user.isAuthenticated()) {
-			return "/security/login";
-		}
-		
-		return "redirect:/main";
-	}
+    private final static Logger logger = LoggerFactory.getLogger(LoginController.class);
 
-	@RequestMapping(value = "/main", method = {RequestMethod.POST, RequestMethod.GET})
-	public String index(Model model, AdminUser curUser) {
-		UsernamePasswordToken token = null;
-		try {
-			Subject subject = SecurityUtils.getSubject();
-			if (!subject.isAuthenticated()) {
-				curUser.setPassword(EncryptionUtil.MD5(curUser.getPassword()));
-				token = new UsernamePasswordToken(curUser.getName(), curUser.getPassword());
-				token.setRememberMe(true);//记住当前用户
-				subject.login(token);
-			} else {
-				curUser = getCurrentUser();
-			}
+    @Autowired
+    private NativeCacheOperator cacheOperator;
+    @Autowired
+    private AdminUserService adminUserService;
+    @Autowired
+    private AdminRoleService adminRoleService;
 
-	    	List<AdminUserRole> adminUserRoles = (super.getCurrentUser()).getAdminUserRoles();
-	    	if (!Objects.equals("admin", curUser.getName()) && (null == adminUserRoles || 0 == adminUserRoles.size())) {
-	    		logger.info("ERP用户没有设置权限 : " + (super.getCurrentUser()).getName());
-	    		return "/security/login";
-	    	}
+    @RequestMapping(value = "/login", method = {RequestMethod.POST, RequestMethod.GET})
+    public String login(Model model, HttpServletRequest request) {
+        Subject user = SecurityUtils.getSubject();
+        if (!user.isAuthenticated()) {
+            return "/security/login";
+        }
+        return "redirect:/main";
+    }
 
-	    	List<Long> adminRoleIdList = new ArrayList<>();
-	        for (AdminUserRole role : adminUserRoles) {
-	        	adminRoleIdList.add(role.getAdminRoleId());
-	        }
-			if (!Objects.equals("admin", curUser.getName())) {
-				List<AdminRole> adminRoles = this.adminRoleService.getAdminRoleByIds(adminRoleIdList);
-				cacheOperator.setAdminRoles(super.getCurrentUser().getId(), adminRoles);
-			}
-			logger.info("ERP登录 : " + (super.getCurrentUser()).getName());
-			return "/layout/main";
-	    } catch (Exception e) {
-			if (null != token) {
-				token.clear();
-			}
-			model.addAttribute("errorMsg", e);
-	    	return "/security/login";
-	    }
-	}
-	
-	@RequestMapping(value = "/logout", method = {RequestMethod.POST, RequestMethod.GET})
-	public String logout(Model model,AdminUser currUser){
-		Subject user = SecurityUtils.getSubject();
-		user.logout();
-    	return "/security/login";
-	}
-	
-	@RequestMapping(value = "/buildFunctionTreeForNavigation", method = RequestMethod.POST)
-	@ResponseBody
-	public List<EasyUITreeNode> buildFunctionTreeForNavigation() {
-		AdminUser user = super.getCurrentUser();
+    @RequestMapping(value = "/main", method = {RequestMethod.POST, RequestMethod.GET})
+    public String index(Model model, AdminUser curUser) {
+        UsernamePasswordToken token = null;
+        try {
+            Subject subject = SecurityUtils.getSubject();
+            if (!subject.isAuthenticated()) {
+                curUser.setPassword(EncryptionUtil.MD5(curUser.getPassword()));
+                token = new UsernamePasswordToken(curUser.getName(), curUser.getPassword());
+                token.setRememberMe(true);//记住当前用户
+                subject.login(token);
+            } else {
+                curUser = getCurrentUser();
+            }
 
-		Map<Long, EasyUITreeNode> nodeMap = new HashMap<>();
-		Set<EasyUITreeNode> permissionAdminFunctionSet = new HashSet<>();
+            List<AdminUserRole> adminUserRoles = (super.getCurrentUser()).getAdminUserRoles();
+            if (!Objects.equals("admin", curUser.getName()) && (null == adminUserRoles || 0 == adminUserRoles.size())) {
+                logger.info("ERP用户没有设置权限 : " + (super.getCurrentUser()).getName());
+                return "/security/login";
+            }
 
-		if (Objects.equals("admin", user.getName())) {
-			for (AdminFunction func : cacheOperator.getAdminFunctions()) {
-				EasyUITreeNode node = new EasyUITreeNode(func.getId(), func.getParentId(), func.getName(), func.getState());
-				node.addAttribute("url", func.getUrl());
-				nodeMap.put(func.getId(), node);
-				permissionAdminFunctionSet.add(node);
-			}
-		} else {
-			List<AdminRole> adminRoles = cacheOperator.getAdminRoles(user.getId());
+            List<Long> adminRoleIdList = new ArrayList<>();
+            for (AdminUserRole role : adminUserRoles) {
+                adminRoleIdList.add(role.getAdminRoleId());
+            }
+            if (!Objects.equals("admin", curUser.getName())) {
+                List<AdminRole> adminRoles = this.adminRoleService.getAdminRoleByIds(adminRoleIdList);
+                cacheOperator.setAdminRoles(super.getCurrentUser().getId(), adminRoles);
+            }
+            logger.info("ERP登录 : " + (super.getCurrentUser()).getName());
+            model.addAttribute("userName", super.getCurrentUser().getName());
+            return "/layout/main";
+        } catch (Exception e) {
+            if (null != token) {
+                token.clear();
+            }
+            model.addAttribute("errorMsg", e);
+            return "/security/login";
+        }
+    }
 
-			List<Long> roleIds = new ArrayList<>();
-			adminRoles.forEach(ar -> roleIds.add(ar.getId()));
+    @RequestMapping(value = "/logout", method = {RequestMethod.POST, RequestMethod.GET})
+    public String logout(Model model, AdminUser currUser) {
+        Subject user = SecurityUtils.getSubject();
+        user.logout();
+        return "/security/login";
+    }
 
-			List<AdminRoleFunction> roleFunctions = adminRoleService.getAdminRoleFunctionsByRoleIds(roleIds);
+    @RequestMapping(value = "/register/adminUser", method = RequestMethod.POST)
+//    @ResponseBody
+    public String addEditAdminUser(AdminUser adminUser, MultipartFile zIdCardFile, MultipartFile fIdCardFile) {
+        boolean f = adminUserService.registerAdminUser(adminUser, zIdCardFile, fIdCardFile);
+        return "redirect:/login";
+    }
 
-			Set<Long> functionIds = new HashSet<>();
-			roleFunctions.forEach(rf -> functionIds.add(rf.getAdminFunctionId()));
+    @RequestMapping(value = "/buildFunctionTreeForNavigation", method = RequestMethod.POST)
+    @ResponseBody
+    public List<EasyUITreeNode> buildFunctionTreeForNavigation() {
+        AdminUser user = super.getCurrentUser();
 
-			for (AdminFunction func : cacheOperator.getAdminFunctions()) {
-				EasyUITreeNode node = new EasyUITreeNode(func.getId(), func.getParentId(), func.getName(), func.getState());
-				node.addAttribute("url", func.getUrl());
-				nodeMap.put(func.getId(), node);
-				if (functionIds.contains(func.getId())) {
-					permissionAdminFunctionSet.add(node);
-				}
-			}
+        Map<Long, EasyUITreeNode> nodeMap = new HashMap<>();
+        Set<EasyUITreeNode> permissionAdminFunctionSet = new HashSet<>();
 
-			Set<EasyUITreeNode> tempPermissionSet = new HashSet<>();
-			for (EasyUITreeNode node : permissionAdminFunctionSet) {
-				completeTreeNode(nodeMap, tempPermissionSet, nodeMap.get(node.getParentId()));
-			}
+        if (Objects.equals("admin", user.getName())) {
+            for (AdminFunction func : cacheOperator.getAdminFunctions()) {
+                EasyUITreeNode node = new EasyUITreeNode(func.getId(), func.getParentId(), func.getName(), func.getState());
+                node.addAttribute("url", func.getUrl());
+                nodeMap.put(func.getId(), node);
+                permissionAdminFunctionSet.add(node);
+            }
+        } else {
+            List<AdminRole> adminRoles = cacheOperator.getAdminRoles(user.getId());
 
-			permissionAdminFunctionSet.addAll(tempPermissionSet);
-		}
-		EasyUITreeNode root = nodeMap.get(1l);
-		List<EasyUITreeNode> treeNodeList = new ArrayList<>(permissionAdminFunctionSet);
-		Collections.sort(treeNodeList);
-		buildTree(treeNodeList, root);
+            List<Long> roleIds = new ArrayList<>();
+            adminRoles.forEach(ar -> roleIds.add(ar.getId()));
 
-		List<EasyUITreeNode> result = new ArrayList<>();
-		result.add(root);
-		return result;
-	}
+            List<AdminRoleFunction> roleFunctions = adminRoleService.getAdminRoleFunctionsByRoleIds(roleIds);
 
-	private void completeTreeNode(Map<Long, EasyUITreeNode> nodeMap, Set<EasyUITreeNode> tempPermissionAdminFunctionSet, EasyUITreeNode node) {
-		if (node.getId() != 1) {
-			tempPermissionAdminFunctionSet.add(node);
-			completeTreeNode(nodeMap, tempPermissionAdminFunctionSet, nodeMap.get(node.getParentId()));
-		}
-	}
+            Set<Long> functionIds = new HashSet<>();
+            roleFunctions.forEach(rf -> functionIds.add(rf.getAdminFunctionId()));
 
-	private void buildTree(List<EasyUITreeNode> treeNodeList, EasyUITreeNode parent) {
-		EasyUITreeNode node;
-		for (Iterator<EasyUITreeNode> ite = treeNodeList.iterator(); ite.hasNext();) {
-			node = ite.next();
-			if (node.getParentId() == parent.getId()) {
-				parent.getChildren().add(node);
-				buildTree(treeNodeList, node);
-			}
-		}
-	}
-	
+            for (AdminFunction func : cacheOperator.getAdminFunctions()) {
+                EasyUITreeNode node = new EasyUITreeNode(func.getId(), func.getParentId(), func.getName(), func.getState());
+                node.addAttribute("url", func.getUrl());
+                nodeMap.put(func.getId(), node);
+                if (functionIds.contains(func.getId())) {
+                    permissionAdminFunctionSet.add(node);
+                }
+            }
+
+            Set<EasyUITreeNode> tempPermissionSet = new HashSet<>();
+            for (EasyUITreeNode node : permissionAdminFunctionSet) {
+                completeTreeNode(nodeMap, tempPermissionSet, nodeMap.get(node.getParentId()));
+            }
+
+            permissionAdminFunctionSet.addAll(tempPermissionSet);
+        }
+        EasyUITreeNode root = nodeMap.get(1l);
+        List<EasyUITreeNode> treeNodeList = new ArrayList<>(permissionAdminFunctionSet);
+        Collections.sort(treeNodeList);
+        buildTree(treeNodeList, root);
+
+        List<EasyUITreeNode> result = new ArrayList<>();
+        result.add(root);
+        return result;
+    }
+
+    private void completeTreeNode(Map<Long, EasyUITreeNode> nodeMap, Set<EasyUITreeNode> tempPermissionAdminFunctionSet, EasyUITreeNode node) {
+        if (node.getId() != 1) {
+            tempPermissionAdminFunctionSet.add(node);
+            completeTreeNode(nodeMap, tempPermissionAdminFunctionSet, nodeMap.get(node.getParentId()));
+        }
+    }
+
+    private void buildTree(List<EasyUITreeNode> treeNodeList, EasyUITreeNode parent) {
+        EasyUITreeNode node;
+        for (Iterator<EasyUITreeNode> ite = treeNodeList.iterator(); ite.hasNext(); ) {
+            node = ite.next();
+            if (node.getParentId() == parent.getId()) {
+                parent.getChildren().add(node);
+                buildTree(treeNodeList, node);
+            }
+        }
+    }
+
 }

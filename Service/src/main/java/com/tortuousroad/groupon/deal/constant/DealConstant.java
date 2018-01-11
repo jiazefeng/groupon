@@ -5,7 +5,8 @@ package com.tortuousroad.groupon.deal.constant;
  */
 public final class DealConstant {
 
-    private DealConstant() {}
+    private DealConstant() {
+    }
 
     public static final int DEAL_CLASS_COMMON = 0; // 普通商品
 
@@ -86,4 +87,6 @@ public final class DealConstant {
      * 商品类别每页商品数量
      */
     public static final int DEAL_NUM_PER_PAGE_IN_DEALS_OF_CATEGORY_PAGE = 12;
+
+    public static final String PICTURE_MODULE_IDCARD = "idcard";
 }

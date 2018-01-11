@@ -100,7 +100,7 @@
 <!-- 	<import resource="applicationContext-xss.xml" /> -->
 
 <!-- shiro -->
-	<bean id="shiroSecurityFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+		<bean id="shiroSecurityFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
 		<!-- shiro的核心安全接口 -->
 		<property name="securityManager" ref="securityManager" />
 		<!--&lt;!&ndash; 要求登录时的链接 &ndash;&gt;-->
@@ -113,7 +113,11 @@
 		<property name="filterChainDefinitions">
 			<value>
 				/css/** = anon
+				/images/** = anon
+				/js/** = anon
 	            /login = anon
+				/register = anon
+				/register/adminUser = anon
 	            /main = anon
 	            /validateCode = anon
 	            /** = authc
