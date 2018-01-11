@@ -4,7 +4,75 @@
     <title>注册-个人用户</title>
     <link type="text/css" rel="stylesheet" href="${ctx}/css/regist.personal.css"/>
     <link type="text/css" rel="stylesheet" href="${ctx}/css/passport.base.css"/>
+    <link rel="stylesheet" type="text/css" href="${ctx}/js/jquery-easyui-1.3.2/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="${ctx}/js/jquery-easyui-1.3.2/themes/icon.css">
+    <link href="${ctx}/js/kindeditor-4.1.10/themes/default/default.css" type="text/css" rel="stylesheet">
     <script type="text/javascript" src="${ctx}/js/jquery-easyui-1.3.2/jquery-1.8.0.min.js"></script>
+    <script type="text/javascript" src="${ctx}/js/jquery-easyui-1.3.2/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="${ctx}/js/jquery-easyui-1.3.2/locale/easyui-lang-zh_CN.js"></script>
+    <script type="text/javascript" charset="utf-8" src="${ctx}/js/kindeditor-4.1.10/kindeditor-all-min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="${ctx}/js/kindeditor-4.1.10/lang/zh_CN.js"></script>
+    <script type="text/javascript" src="${ctx}/js/common.js"></script>
+    <style>
+        ul, li {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .text-cyan {
+            color: cyan;
+        }
+
+        .text-muted {
+            color: #999;
+        }
+
+        .item-img {
+            position: relative;
+            /*margin: 8px 0;*/
+            margin-left: 200px;
+            margin-bottom: 20px;
+        }
+
+        .item-img ul {
+            font-size: 15px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            color: #fff;
+            text-shadow: 1px 1px 5px #000;
+            border:1px dotted rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .item-img ul li {
+            margin: 10px 15px;
+        }
+
+        .item-img img {
+            max-width: 100%;
+            box-shadow: 1px 1px 5px #ccc;
+        }
+
+        footer {
+            width: 100%;
+            font-size: 12px;
+            text-align: center;
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            margin: 20px 0;
+        }
+
+        footer a {
+            color: #777;
+        }
+
+        /*input {*/
+            /*display: none;*/
+        /*}*/
+    </style>
 </head>
 <body>
 <div class="w" id="logo" style="padding-bottom: 65px">
@@ -26,34 +94,40 @@
         </div>
     </div>
     <div class="mc">
-        <form id="personRegForm" method="post" onsubmit="return false;">
-            <div class="form" onselectstart="return false;">
-                <div class="item" id="select-regName">
+        <form id="personRegForm" action="/register/adminUser" method="post" enctype="multipart/form-data">
+            <div class="form">
+                <div class="item">
                     <span class="label"><b class="ftx04">*</b>用户名：</span>
 
                     <div class="fl item-ifo">
                         <div class="o-intelligent-regName">
-                            <input type="text" id="regName" name="username" class="text" tabindex="1" autoComplete="off"
-                                   onpaste="return false;" value="" />
+                            <input type="text" id="name" name="name" class="text" tabindex="1" autoComplete="off"
+                                   onpaste="return false;" value=""/>
                             <i class="i-name"></i>
-                            <ul id="intelligent-regName" class="hide"></ul>
-                            <label id="regName_succeed" class="blank"></label>
-                            <label id="regName_error" class="hide"></label>
                         </div>
                     </div>
                 </div>
-                <div id="o-password">
+                <div class="item">
+                    <span class="label"><b class="ftx04">*</b>用户姓名：</span>
+
+                    <div class="fl item-ifo">
+                        <div class="o-intelligent-regName">
+                            <input type="text" id="userName" name="userName" class="text" tabindex="1"
+                                   autoComplete="off"
+                                   onpaste="return false;" value=""/>
+                            <i class="i-name"></i>
+                        </div>
+                    </div>
+                </div>
+                <div>
                     <div class="item">
                         <span class="label"><b class="ftx04">*</b>请设置密码：</span>
 
                         <div class="fl item-ifo">
-                            <input type="password" id="pwd" name="password" class="text" tabindex="2"
+                            <input type="password" id="password" name="password" class="text" tabindex="2"
                                    style="ime-mode:disabled;"
                                    onpaste="return  false" autocomplete="off"/>
                             <i class="i-pass"></i>
-                            <label id="pwd_succeed" class="blank"></label>
-                            <label id="pwd_error"></label>
-                            <span class="clr"></span>
                         </div>
                     </div>
 
@@ -64,124 +138,66 @@
                             <input type="password" id="pwdRepeat" name="pwdRepeat" class="text" tabindex="3"
                                    onpaste="return  false" autocomplete="off"/>
                             <i class="i-pass"></i>
-                            <label id="pwdRepeat_succeed" class="blank"></label>
-                            <label id="pwdRepeat_error"></label>
                         </div>
                     </div>
-                    <div class="item" id="dphone">
+                    <div class="item">
                         <span class="label"><b class="ftx04">*</b>验证手机：</span>
 
                         <div class="fl item-ifo">
-                            <input type="text" id="phone" maxlength="11" name="phone"
+                            <input type="text" id="phoneNum" maxlength="11" name="phoneNum"
                                    class="text" tabindex="4"
-                                   autocomplete="off"/> <i class="i-phone"></i> <label
-                                id="phone_succeed" class="blank"></label> <label
-                                id="phone_error"></label>
+                                   autocomplete="off"/>
+                            <i class="i-phone"></i>
                         </div>
                     </div>
-                </div>
-                <div class="item item-new">
-                    <span class="label">&nbsp;</span>
+                    <div class="item">
+                        <span class="label"><b class="ftx04">*</b>上传身份证-正面：</span>
 
-                    <div class="fl item-ifo">
-                        <input type="checkbox" class="checkbox" checked="checked" id="readme"
-                               onclick="agreeonProtocol();">
-                        <label for="protocol">我已阅读并同意<a href="#" class="blue" id="protocol">《淘淘用户注册协议》</a></label>
-                        <span class="clr"></span>
-                        <label id="protocol_error" class="error hide">请接受服务条款</label>
+                        <div class="fl item-ifo">
+                            <input class="uploadfile" type="file" capture="camera" name="zIdCardFile" id="zIdCardFile" style="display:inline"/>
+                        <#-- <a href="javascript:void(0)" class="easyui-linkbutton picFileUpload">选择正面</a>
+                         <input type="hidden" name="zIdCardUrl"/>-->
+                        </div>
+                    </div>
+                    <div>
+                        <ul id="report"></ul>
+                    </div>
+                    <div class="item" id="dphone">
+                        <span class="label"><b class="ftx04">*</b>上传身份证-反面：</span>
+
+                        <div class="fl item-ifo">
+                            <input class="uploadfile" type="file" capture="camera" name="fIdCardFile" id="fIdCardFile" style="display:inline"/>
+                        </div>
+                    </div>
+                    <div>
+                        <ul id="report1"></ul>
                     </div>
                 </div>
+
                 <div class="item">
                     <span class="label">&nbsp;</span>
-                    <input type="button" class="btn-img btn-regist" id="registsubmit" value="立即注册" tabindex="8"
+                    <input type="submit" class="btn-img btn-regist" id="registsubmit" value="立即注册" tabindex="8"
                            clstag="regist|keycount|personalreg|07"
                            onclick=""/>
                 </div>
             </div>
-        <#--<div class="phone">-->
-        <#--<img width="180" height="180" src="/images/phone-bg.jpg">-->
-        <#--</div>-->
-        <#--<span class="clr"></span>-->
         </form>
+        <#--<div id="tip"></div>-->
+        <#--<footer> </footer>-->
     </div>
-<#--<script type="text/javascript">-->
-<#--var REGISTER={-->
-<#--param:{-->
-<#--//单点登录系统的url-->
-<#--surl:""-->
-<#--},-->
-<#--inputcheck:function(){-->
-<#--//不能为空检查-->
-<#--if ($("#regName").val() == "") {-->
-<#--alert("用户名不能为空");-->
-<#--$("#regName").focus();-->
-<#--return false;-->
-<#--}-->
-<#--if ($("#pwd").val() == "") {-->
-<#--alert("密码不能为空");-->
-<#--$("#pwd").focus();-->
-<#--return false;-->
-<#--}-->
-<#--if ($("#phone").val() == "") {-->
-<#--alert("手机号不能为空");-->
-<#--$("#phone").focus();-->
-<#--return false;-->
-<#--}-->
-<#--//密码检查-->
-<#--if ($("#pwd").val() != $("#pwdRepeat").val()) {-->
-<#--alert("确认密码和密码不一致，请重新输入！");-->
-<#--$("#pwdRepeat").select();-->
-<#--$("#pwdRepeat").focus();-->
-<#--return false;-->
-<#--}-->
-<#--return true;-->
-<#--},-->
-<#--beforeSubmit:function() {-->
-<#--//检查用户是否已经被占用-->
-<#--$.ajax({-->
-<#--url : REGISTER.param.surl + "/user/check/"+escape($("#regName").val())+"/1?r=" + Math.random(),-->
-<#--success : function(data) {-->
-<#--if (data.data) {-->
-<#--//检查手机号是否存在-->
-<#--$.ajax({-->
-<#--url : REGISTER.param.surl + "/user/check/"+$("#phone").val()+"/2?r=" + Math.random(),-->
-<#--success : function(data) {-->
-<#--if (data.data) {-->
-<#--REGISTER.doSubmit();-->
-<#--} else {-->
-<#--alert("此手机号已经被注册！");-->
-<#--$("#phone").select();-->
-<#--}-->
-<#--}-->
-<#--});-->
-<#--} else {-->
-<#--alert("此用户名已经被占用，请选择其他用户名");-->
-<#--$("#regName").select();-->
-<#--}	-->
-<#--}-->
-<#--});-->
-<#---->
-<#--},-->
-<#--doSubmit:function() {-->
-<#--$.post("/user/register",$("#personRegForm").serialize(), function(data){-->
-<#--if(data.status == 200){-->
-<#--alert('用户注册成功，请登录！');-->
-<#--REGISTER.login();-->
-<#--} else {-->
-<#--alert("注册失败！");-->
-<#--}-->
-<#--});-->
-<#--},-->
-<#--login:function() {-->
-<#--location.href = "/page/login";-->
-<#--return false;-->
-<#--},-->
-<#--reg:function() {-->
-<#--if (this.inputcheck()) {-->
-<#--this.beforeSubmit();-->
-<#--}-->
-<#--}-->
-<#--};-->
-<#--</script>-->
+    <script>
+        $(function () {
+            //初始化类目选择和图片上传器
+            TAOTAO.init({
+                fun: function (node) {
+                }
+            });
+        });
+    </script>
+    <#--<script src="${ctx}/js/img/mobileFix.mini.js?v=ad62f13"></script>-->
+    <script src="${ctx}/js/img/lrz.pc.min.js"></script>
+    <script src="${ctx}/js/img/exif.js"></script>
+    <script src="${ctx}/js/img/lrz.js"></script>
+    <script src="${ctx}/js/img/index.js"></script>
 </body>
 </html>

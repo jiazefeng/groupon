@@ -16,58 +16,65 @@ import com.tortuousroad.framework.common.search.Search;
  */
 @Repository
 public class AdminUserDAO extends BaseMybatisDAO {
-	
-	private static final String MAPPER_NAMESPACE = "com.tortuousroad.admin.security.entity.AdminUserMapper";
 
-	/**
-	 * 根据用户名查询AdminUser
-	 * @param username
-	 * @return
-     */
-	public AdminUser getUserByUsername(String username) {
-		Map<String, Object> params = new HashMap<>();
-		params.put("name", username);
-		return super.findOne(MAPPER_NAMESPACE + ".selectAdminUserByName", params);
-	}
+    private static final String MAPPER_NAMESPACE = "com.tortuousroad.admin.security.entity.AdminUserMapper";
 
-	/**
-	 * 分页查询AdminUser
-	 * @param search
-	 * @return
+    /**
+     * 根据用户名查询AdminUser
+     *
+     * @param username
+     * @return
      */
-	public PagingResult<AdminUser> findPage(Search search) {
-		return super.findForPage(MAPPER_NAMESPACE + ".countPage", MAPPER_NAMESPACE + ".findPage", search);
-	}
+    public AdminUser getUserByUsername(String username) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("name", username);
+        return super.findOne(MAPPER_NAMESPACE + ".selectAdminUserByName", params);
+    }
 
-	/**
-	 * 保存
-	 * @param adminUser
+    /**
+     * 分页查询AdminUser
+     *
+     * @param search
+     * @return
      */
-	public void save(AdminUser adminUser) {
-		super.save(MAPPER_NAMESPACE + ".insertAdminUser", adminUser);
-	}
+    public PagingResult<AdminUser> findPage(Search search) {
+        return super.findForPage(MAPPER_NAMESPACE + ".countPage", MAPPER_NAMESPACE + ".findPage", search);
+    }
 
-	/**
-	 * 更新
-	 * @param adminUser
+    /**
+     * 保存
+     *
+     * @param adminUser
      */
-	public void update(AdminUser adminUser) {
-		super.update(MAPPER_NAMESPACE + ".update", adminUser);
-	}
+    public void save(AdminUser adminUser) {
+        super.save(MAPPER_NAMESPACE + ".insertAdminUser", adminUser);
+        System.out.print(adminUser);
+    }
 
-	/**
-	 * 根据ID查询AdminUser
-	 * @param adminUserId
+    /**
+     * 更新
+     *
+     * @param adminUser
      */
-	public void deleteById(Long adminUserId) {
-		super.delete(MAPPER_NAMESPACE + ".deleteById", adminUserId);
-	}
+    public void update(AdminUser adminUser) {
+        super.update(MAPPER_NAMESPACE + ".update", adminUser);
+    }
 
-	/**
-	 * 查询全部AdminUser
-	 * @return
+    /**
+     * 根据ID查询AdminUser
+     *
+     * @param adminUserId
      */
-	public List<AdminUser> getAll() {
-		return super.findAll(MAPPER_NAMESPACE + ".selectAll");
-	}
+    public void deleteById(Long adminUserId) {
+        super.delete(MAPPER_NAMESPACE + ".deleteById", adminUserId);
+    }
+
+    /**
+     * 查询全部AdminUser
+     *
+     * @return
+     */
+    public List<AdminUser> getAll() {
+        return super.findAll(MAPPER_NAMESPACE + ".selectAll");
+    }
 }

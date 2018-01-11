@@ -18,7 +18,7 @@ import com.tortuousroad.common.constant.GlobalConstant;
 public class GraphicsTools {
 	
 //	private static String graphicsMagicKPath = "/usr/local/Cellar/graphicsmagick/1.3.23/bin/";
-private static String graphicsMagicKPath = "E:\\Program Files\\GraphicsMagick-1.3.26-Q16";
+private static String graphicsMagicKPath = "E:\\Program Files\\GraphicsMagick";
 
 	/**
 	 * 根据尺寸裁剪(缩放)图片
