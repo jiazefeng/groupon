@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tortuousroad.news.entity.NewsMapper">
+    <resultMap id="BaseResultMap" type="com.tortuousroad.news.entity.News">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="title" property="title" jdbcType="VARCHAR"/>
+        <result column="content" property="content" jdbcType="VARCHAR"/>
+        <result column="newImgUrl" property="newimgurl" jdbcType="VARCHAR"/>
+        <result column="createDate" property="createdate" jdbcType="TIMESTAMP"/>
+        <result column="publisher" property="publisher" jdbcType="VARCHAR"/>
+        <result column="pubdate" property="pubdate" jdbcType="TIMESTAMP"/>
+        <result column="newSource" property="newsource" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, title, content, newImgUrl, createDate, publisher, pubdate, newSource
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from news
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from news
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+    <insert id="insert" parameterType="com.tortuousroad.news.entity.News">
+    insert into news (id, title, content, 
+      newImgUrl, createDate, publisher, 
+      pubdate, newSource)
+    values (#{id,jdbcType=BIGINT}, #{title,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, 
+      #{newimgurl,jdbcType=VARCHAR}, #{createdate,jdbcType=TIMESTAMP}, #{publisher,jdbcType=VARCHAR}, 
+      #{pubdate,jdbcType=TIMESTAMP}, #{newsource,jdbcType=VARCHAR})
+  </insert>
+    <insert id="insertSelective" parameterType="com.tortuousroad.news.entity.News">
+        insert into news
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="title != null">
+                title,
+            </if>
+            <if test="content != null">
+                content,
+            </if>
+            <if test="newimgurl != null">
+                newImgUrl,
+            </if>
+            <if test="createdate != null">
+                createDate,
+            </if>
+            <if test="publisher != null">
+                publisher,
+            </if>
+            <if test="pubdate != null">
+                pubdate,
+            </if>
+            <if test="newsource != null">
+                newSource,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="title != null">
+                #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null">
+                #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="newimgurl != null">
+                #{newimgurl,jdbcType=VARCHAR},
+            </if>
+            <if test="createdate != null">
+                #{createdate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="publisher != null">
+                #{publisher,jdbcType=VARCHAR},
+            </if>
+            <if test="pubdate != null">
+                #{pubdate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="newsource != null">
+                #{newsource,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <!-- 分页查询 -->
+    <select id="selectPageNews" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM news where 1 = 1
+        <if test="title != null">
+           AND title = #{title,jdbcType=VARCHAR},
+        </if>
+        <if test="content != null">
+          AND  content = #{content,jdbcType=VARCHAR},
+        </if>
+        <if test="newimgurl != null">
+          AND  newImgUrl = #{newimgurl,jdbcType=VARCHAR},
+        </if>
+        <if test="createdate != null">
+          AND  createDate >= #{createdate,jdbcType=TIMESTAMP},
+        </if>
+        <if test="publisher != null">
+          AND  publisher = #{publisher,jdbcType=VARCHAR},
+        </if>
+        <if test="pubdate != null">
+           AND pubdate  &gt;= #{pubdate},
+        </if>
+        <if test="newsource != null">
+           AND newSource = #{newsource,jdbcType=VARCHAR},
+        </if>
+        order by createDate desc
+    </select>
+
+    <!-- 分页查询记录数 -->
+    <select id="countPageNews" resultType="java.lang.Long">
+        SELECT count(*) FROM news
+        where 1 = 1
+        <if test="title != null">
+            AND title = #{title,jdbcType=VARCHAR},
+        </if>
+        <if test="content != null">
+            AND  content = #{content,jdbcType=VARCHAR},
+        </if>
+        <if test="newimgurl != null">
+            AND  newImgUrl = #{newimgurl,jdbcType=VARCHAR},
+        </if>
+        <if test="createdate != null">
+            AND  createDate >= #{createdate,jdbcType=TIMESTAMP},
+        </if>
+        <if test="publisher != null">
+            AND  publisher = #{publisher,jdbcType=VARCHAR},
+        </if>
+        <if test="pubdate != null">
+            AND pubdate  &gt;= #{pubdate},
+        </if>
+        <if test="newsource != null">
+            AND newSource = #{newsource,jdbcType=VARCHAR},
+        </if>
+    </select>
+    <update id="updateByPrimaryKeySelective" parameterType="com.tortuousroad.news.entity.News">
+        update news
+        <set>
+            <if test="title != null">
+                title = #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null">
+                content = #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="newimgurl != null">
+                newImgUrl = #{newimgurl,jdbcType=VARCHAR},
+            </if>
+            <if test="createdate != null">
+                createDate = #{createdate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="publisher != null">
+                publisher = #{publisher,jdbcType=VARCHAR},
+            </if>
+            <if test="pubdate != null">
+                pubdate = #{pubdate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="newsource != null">
+                newSource = #{newsource,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.tortuousroad.news.entity.News">
+    update news
+    set title = #{title,jdbcType=VARCHAR},
+      content = #{content,jdbcType=VARCHAR},
+      newImgUrl = #{newimgurl,jdbcType=VARCHAR},
+      createDate = #{createdate,jdbcType=TIMESTAMP},
+      publisher = #{publisher,jdbcType=VARCHAR},
+      pubdate = #{pubdate,jdbcType=TIMESTAMP},
+      newSource = #{newsource,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

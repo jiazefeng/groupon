@@ -89,4 +89,5 @@ public final class DealConstant {
     public static final int DEAL_NUM_PER_PAGE_IN_DEALS_OF_CATEGORY_PAGE = 12;
 
     public static final String PICTURE_MODULE_IDCARD = "idcard";
+    public static final String PICTURE_MODULE_NEWS = "news";
 }

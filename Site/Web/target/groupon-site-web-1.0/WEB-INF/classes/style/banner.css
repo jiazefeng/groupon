@@ -1,0 +1,79 @@
+/*特效容器*/
+#banner{
+    /*width: 738px;*/
+    height: 345px;
+    /*margin: 150px auto 0;*/
+    position: relative;
+    overflow: hidden;
+}
+/*大图片*/
+#banner .pic{
+    /*width: 738px;*/
+    height: 345px;
+    position: relative;
+}
+
+#banner .pic ul li{
+    list-style: none;
+    /*width: 738px;*/
+    height: 345px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: none;
+}
+
+#banner .pic ul li.first{
+    display: block;
+}
+
+/*按钮*/
+#banner .but{
+    width:104px;
+    height: 10px;
+    position: absolute;
+    bottom: 10px;
+    left: 60%;
+    margin-left: -52px;
+}
+
+#banner .but ul li{
+    list-style: none;
+    width: 10px;
+    height: 10px;
+    float: left;
+    margin: 0 5px;
+    background-color: white;
+    border-radius: 50%;
+}
+
+#banner .but ul li.first{
+    background-color: red;
+}
+/*图片导航*/
+#banner .picnav{
+    width: 625px;
+    height: 80px;
+    background-color: rgba(255,255,255,0.8);
+    position: absolute;
+    bottom: -86px;
+    left:50%;
+    margin-left: -205px;
+}
+
+#banner .picnav ul li{
+    list-style: none;
+    width: 115px;
+    height: 75px;
+    float: left;
+    margin: 5px;
+}
+
+#banner .picnav ul li.first{
+    border-bottom: 4px solid red;
+}
+
+#banner .picnav ul li img{
+    width: 115px;
+    height: 70px;
+}

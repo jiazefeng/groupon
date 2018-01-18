@@ -58,10 +58,10 @@
                         <#--</div>-->
                     <#--</div>-->
                 </div>
-                <ul class="nav fl">
-                    <li><a href="${ctx}" <#if controller?? && controller=="index">class="active"</#if>>团购</a></li>
-                    <li><a href="${ctx}" <#if controller?? && controller=="takeout">class="active"</#if>>二手特卖</a></li>
-                </ul>
+                <#--<ul class="nav fl">-->
+                    <#--<li><a href="${ctx}" <#if controller?? && controller=="index">class="active"</#if>>团购</a></li>-->
+                    <#--<li><a href="${ctx}" <#if controller?? && controller=="takeout">class="active"</#if>>二手特卖</a></li>-->
+                <#--</ul>-->
             </div>
         </div>
     </#if>

@@ -14,7 +14,7 @@
 
 <script type="text/javascript">
 	function onSelectDealCategory(node) {
-		if (node.attributes.deep != 3) {
+		if (node.attributes.deep != 2) {
 			Messager.Prompt("温馨提示", "请选择合法的商品类别");
 			$('#dealCategory').combotree('clear');
 		}
