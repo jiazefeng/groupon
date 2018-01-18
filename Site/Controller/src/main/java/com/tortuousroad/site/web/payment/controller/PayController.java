@@ -85,7 +85,7 @@ public class PayController extends BaseSiteController {
         //通过工厂类及支付类型(payType)实例化具体支付方式
         if (payType == OrderConstant.PAY_TYPE_COD) {
             String basePath = request.getScheme() + "//:" + request.getServerName() + ":" + request.getServerPort();
-            response.sendRedirect(basePath + "/settlement/return");
+            response.sendRedirect("/settlement/return");
             return;
         }
         Payment payment = PaymentFactory.createPayment(payType);

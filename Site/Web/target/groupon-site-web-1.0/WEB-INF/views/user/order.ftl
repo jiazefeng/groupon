@@ -3,6 +3,16 @@
 <html>
 <head>
     <title>我的订单</title>
+    <script>
+        function addCart() {
+        <#if username??>
+        <#--${ctx}/settlement/${deal.skuId}-->
+            window.location = ctx + '/cart';
+        <#else >
+            window.location = ctx + '/login';
+        </#if>
+        }
+    </script>
 </head>
 <body>
 <div class="hr_15"></div>

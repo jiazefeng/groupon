@@ -201,7 +201,7 @@ public class DealCategoryService {
         }
 
         // 更新缓存
-//        dealCategoryCacheOperator.putDealCategory(category);
+        dealCategoryCacheOperator.putDealCategory(category);
         return effectRows;
     }
 
@@ -219,7 +219,7 @@ public class DealCategoryService {
         }
 
         // 更新缓存
-//        dealCategoryCacheOperator.putDealCategory(dealCategoryDAO.getById(category.getId()));
+        dealCategoryCacheOperator.putDealCategory(dealCategoryDAO.getById(category.getId()));
 
         return effectRows;
     }
@@ -241,7 +241,7 @@ public class DealCategoryService {
         }
 
         // 更新缓存
-//        dealCategoryCacheOperator.deleteDealCategory(categoryId);
+        dealCategoryCacheOperator.deleteDealCategory(categoryId);
 
         return effectRows;
     }

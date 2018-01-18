@@ -104,7 +104,7 @@ public class ProductController extends BaseAdminController {
 				return new AjaxResult(AjaxResult.AJAX_STATUS_CODE_ERROR, "商品保存失败, 读取图片错误");
 			}
 			if (saveDealSuccess) {
-				return new AjaxResult(AjaxResult.AJAX_STATUS_CODE_ERROR, "商品保存成功");
+				return new AjaxResult(AjaxResult.AJAX_STATUS_CODE_SUCCESS, "商品保存成功");
 			} else {
 				return new AjaxResult(AjaxResult.AJAX_STATUS_CODE_ERROR, "商品保存失败");
 			}
@@ -119,7 +119,7 @@ public class ProductController extends BaseAdminController {
 			}
 			boolean updateDealSuccess = dealService.updateDeal(deal, dealImgBytes);
 			if (updateDealSuccess) {
-				return new AjaxResult(AjaxResult.AJAX_STATUS_CODE_ERROR, "商品更新成功");
+				return new AjaxResult(AjaxResult.AJAX_STATUS_CODE_SUCCESS, "商品更新成功");
 			} else {
 				return new AjaxResult(AjaxResult.AJAX_STATUS_CODE_ERROR, "商品更新失败");
 			}

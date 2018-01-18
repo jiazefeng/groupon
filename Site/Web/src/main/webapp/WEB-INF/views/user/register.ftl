@@ -3,9 +3,9 @@
 <head>
     <meta charset="utf-8">
     <title>注册</title>
-    <link rel="icon" href="images/favicon.ico" type="image/x-icon"/>
-    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon"/>
-    <link rel="bookmark" href="images/favicon.ico" type="image/x-icon"/>
+    <#--<link rel="icon" href="images/favicon.ico" type="image/x-icon"/>-->
+    <#--<link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon"/>-->
+    <#--<link rel="bookmark" href="images/favicon.ico" type="image/x-icon"/>-->
     <link type="text/css" rel="stylesheet" href="${ctx}/style/reset.css">
     <link type="text/css" rel="stylesheet" href="${ctx}/style/main.css">
     <!--[if IE 6]>
@@ -19,7 +19,7 @@
     <div class="logoBar red_logo">
         <div class="comWidth">
             <div class="logo fl">
-                <a href="#"><img src="${ctx}/images/logo.jpg" alt="慕课网"></a>
+                <#--<a href="#"><img src="${ctx}/images/logo.jpg" alt="慕课网"></a>-->
             </div>
             <h3 class="welcome_title">欢迎注册</h3>
         </div>
@@ -27,6 +27,9 @@
 </div>
 
 <div class="regBox">
+    <div><span style="float: right;font-size: 16px;">我已经注册，现在就&nbsp;
+        <a href="${ctx}/login"><b>[登录]</b></a>
+        </span></div>
     <div class="login_cont">
         <ul class="login">
             <form action="/register" method="post">
@@ -42,7 +45,7 @@
                 <li class="autoLogin"><span class="reg_item">&nbsp;</span><input type="checkbox" id="t1"
                                                                                  class="checked"><label for="t1">我同意什么什么条款</label>
                 </li>
-                <li><span class="reg_item">&nbsp;</span><input type="submit" value="" class="login_btn"></li>
+                <li><span class="reg_item">&nbsp;</span><input type="submit" value="" class="register_btn"></li>
             </form>
         </ul>
     </div>
